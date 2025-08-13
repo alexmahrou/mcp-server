@@ -26,6 +26,7 @@ To connect local MCP clients (like Claude Desktop) to the QC MCP Server, follow 
         "--rm",
         "-e", "QUANTCONNECT_USER_ID",
         "-e", "QUANTCONNECT_API_TOKEN",
+        "-e", "AGENT_NAME",
         "--platform", "<your_platform>",
         "--name",
         "quantconnect-mcp-server",
@@ -33,7 +34,8 @@ To connect local MCP clients (like Claude Desktop) to the QC MCP Server, follow 
       ],
       "env": {
         "QUANTCONNECT_USER_ID": "<your_user_id>",
-        "QUANTCONNECT_API_TOKEN": "<your_api_token>"
+        "QUANTCONNECT_API_TOKEN": "<your_api_token>",
+        "AGENT_NAME": "MCP Server"
       }
     }
   }
@@ -43,6 +45,8 @@ To connect local MCP clients (like Claude Desktop) to the QC MCP Server, follow 
   To get your user Id and API token, see [Request API Token](https://www.quantconnect.com/docs/v2/cloud-platform/community/profile#09-Request-API-Token).
 
   Our MCP server is multi-platform capable. The options are `linux/amd64` for Intel/AMD chips and `linux/arm64` for ARM chips (for example, Apple's M-series chips).
+
+  If you simultaneously run multiple agents, set a unique value for the `AGENT_NAME` environment variable for each agent to keep record of the request source. 
 
 5. Restart Claude Desktop.
 
@@ -350,6 +354,7 @@ Add a file to a given project.
 | `projectId` | `integer`  | Id of the project to add the file. |
 | `name` | `string`  | The name of the new file. |
 | `content` | `string` *optional* | The content of the new file. |
+| `codeSourceId` | `string` *optional* | Name of the environment that's creating the request. |
 
 *This tool modifies it's environment.*
 
@@ -368,6 +373,7 @@ Read a file from a project, or all files in the project if no file name is provi
 | -------- | ------- | ------- |
 | `projectId` | `integer`  | Id of the project that contains the file. |
 | `name` | `string` *optional* | The name of the file to read. |
+| `codeSourceId` | `string` *optional* | Name of the environment that's creating the request. |
 
 *This tool doesn't modify it's environment.*
 
@@ -383,6 +389,7 @@ Update the name of a file.
 | `projectId` | `integer`  | Id of the project that contains the file. |
 | `name` | `string`  | The current name of the file. |
 | `newName` | `string`  | The new name for the file. |
+| `codeSourceId` | `string` *optional* | Name of the environment that's creating the request. |
 
 *This tool modifies it's environment.*
 
@@ -402,6 +409,7 @@ Update the contents of a file.
 | `projectId` | `integer`  | Id of the project that contains the file. |
 | `name` | `string`  | The name of the file to update. |
 | `content` | `string`  | The new contents of the file. |
+| `codeSourceId` | `string` *optional* | Name of the environment that's creating the request. |
 
 *This tool modifies it's environment.*
 
@@ -420,6 +428,7 @@ Delete a file in a project.
 | -------- | ------- | ------- |
 | `projectId` | `integer`  | Id of the project that contains the file. |
 | `name` | `string`  | The name of the file to delete. |
+| `codeSourceId` | `string` *optional* | Name of the environment that's creating the request. |
 
 *This tool modifies it's environment.*
 
