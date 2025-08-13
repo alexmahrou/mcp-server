@@ -5,16 +5,16 @@ description = "Python MCP server for local interactions with the QuantConnect AP
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "python-dotenv>=0.23.0",
-    "httpx>=0.28.1",
-    "mcp[cli]>=1.9.3",
-    "pydantic>=2",
-    "pydantic-core>=2",
-    "requests>=2",
+  "python-dotenv>=0.23.0",
+  "httpx>=0.28.1",
+  "mcp[cli]>=1.9.3",
+  "pydantic>=2",
+  # pydantic-core is pulled in by pydantic; no need to pin it separately
+  "requests>=2"
 ]
 
 [project.optional-dependencies]
 test = ["pytest", "pytest-asyncio", "jsonschema"]
 
 [tool.pytest.ini_options]
-pythonpath = "src"
+pythonpath = ["src"]
