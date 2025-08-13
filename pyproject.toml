@@ -10,5 +10,8 @@ dependencies = [
     "mcp[cli]>=1.9.3",
 ]
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [tool.pytest.ini_options]
 pythonpath = "src"
