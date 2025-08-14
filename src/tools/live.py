@@ -26,12 +26,15 @@ from models import (
     ReadLiveLogsResponse,
     RestResponse
 )
+from tool_args import tool_with_args
 
 def register_live_trading_tools(mcp):
     # Authenticate
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        AuthorizeExternalConnectionRequest,
         annotations={
-            'title': 'Authorize external connection', 
+            'title': 'Authorize external connection',
             'readOnlyHint': False,
             'destructiveHint': False,
             'idempotentHint': True
@@ -64,7 +67,9 @@ def register_live_trading_tools(mcp):
         return await post('/live/auth0/read', model, 800.0)
 
     # Create
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        CreateLiveAlgorithmRequest,
         annotations={
             'title': 'Create live algorithm', 'destructiveHint': False
         }
@@ -75,21 +80,33 @@ def register_live_trading_tools(mcp):
         return await post('/live/create', model)
 
     # Read (singular)
-    @mcp.tool(annotations={'title': 'Read live algorithm', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ReadLiveAlgorithmRequest,
+        annotations={'title': 'Read live algorithm', 'readOnly': True}
+    )
     async def read_live_algorithm(
             model: ReadLiveAlgorithmRequest) -> LiveAlgorithmResults:
         """Read details of a live algorithm."""
         return await post('/live/read', model)
 
     # Read (all).
-    @mcp.tool(annotations={'title': 'List live algorithms', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ListLiveAlgorithmsRequest,
+        annotations={'title': 'List live algorithms', 'readOnly': True}
+    )
     async def list_live_algorithms(
             model: ListLiveAlgorithmsRequest) -> LiveAlgorithmListResponse:
         """List all your past and current live trading deployments."""
         return await post('/live/list', model)
 
     # Read a chart.
-    @mcp.tool(annotations={'title': 'Read live chart', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ReadLiveChartRequest,
+        annotations={'title': 'Read live chart', 'readOnly': True}
+    )
     async def read_live_chart(
             model: ReadLiveChartRequest
             ) -> ReadChartResponse | LoadingResponse:
@@ -97,7 +114,11 @@ def register_live_trading_tools(mcp):
         return await post('/live/chart/read', model)
 
     # Read the logs.
-    @mcp.tool(annotations={'title': 'Read live logs', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ReadLiveLogsRequest,
+        annotations={'title': 'Read live logs', 'readOnly': True}
+    )
     async def read_live_logs(
             model: ReadLiveLogsRequest) -> ReadLiveLogsResponse:
         """Get the logs of a live algorithm.
@@ -106,7 +127,11 @@ def register_live_trading_tools(mcp):
         return await post('/live/logs/read', model)
 
     # Read the portfolio state.
-    @mcp.tool(annotations={'title': 'Read live portfolio', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ReadLivePortfolioRequest,
+        annotations={'title': 'Read live portfolio', 'readOnly': True}
+    )
     async def read_live_portfolio(
             model: ReadLivePortfolioRequest) -> LivePortfolioResponse:
         """Read out the portfolio state of a live algorithm.
@@ -115,7 +140,11 @@ def register_live_trading_tools(mcp):
         return await post('/live/portfolio/read', model)
 
     # Read the orders.
-    @mcp.tool(annotations={'title': 'Read live orders', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ReadLiveOrdersRequest,
+        annotations={'title': 'Read live orders', 'readOnly': True}
+    )
     async def read_live_orders(
             model: ReadLiveOrdersRequest
             ) -> LiveOrdersResponse | LoadingResponse:
@@ -125,7 +154,11 @@ def register_live_trading_tools(mcp):
         return await post('/live/orders/read', model)
 
     # Read the insights.
-    @mcp.tool(annotations={'title': 'Read live insights', 'readOnly': True})
+    @tool_with_args(
+        mcp,
+        ReadLiveInsightsRequest,
+        annotations={'title': 'Read live insights', 'readOnly': True}
+    )
     async def read_live_insights(
             model: ReadLiveInsightsRequest) -> LiveInsightsResponse:
         """Read out the insights of a live algorithm.
@@ -134,7 +167,9 @@ def register_live_trading_tools(mcp):
         return await post('/live/insights/read', model)
 
     # Update (stop)
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        StopLiveAlgorithmRequest,
         annotations={'title': 'Stop live algorithm', 'idempotentHint': True}
     )
     async def stop_live_algorithm(
@@ -143,7 +178,9 @@ def register_live_trading_tools(mcp):
         return await post('/live/update/stop', model)
 
     # Update (liquidate)
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        LiquidateLiveAlgorithmRequest,
         annotations={
             'title': 'Liquidate live algorithm', 'idempotentHint': True
         }
