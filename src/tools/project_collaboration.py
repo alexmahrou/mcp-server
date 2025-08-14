@@ -1,6 +1,6 @@
 from api_connection import post
 from models import (
-    CreateCollaboratorRequest, 
+    CreateCollaboratorRequest,
     ReadCollaboratorsRequest,
     UpdateCollaboratorRequest,
     DeleteCollaboratorRequest,
@@ -9,10 +9,13 @@ from models import (
     UpdateCollaboratorResponse,
     DeleteCollaboratorResponse
 )
+from tool_args import tool_with_args
 
 def register_project_collaboration_tools(mcp):
     # Create
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        CreateCollaboratorRequest,
         annotations={
             'title': 'Create project collaborator',
             'destructiveHint': False,
@@ -25,7 +28,9 @@ def register_project_collaboration_tools(mcp):
         return await post('/projects/collaboration/create', model)
 
     # Read
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        ReadCollaboratorsRequest,
         annotations={
             'title': 'Read project collaborators',
             'readOnlyHint': True
@@ -37,7 +42,9 @@ def register_project_collaboration_tools(mcp):
         return await post('/projects/collaboration/read', model)
 
     # Update
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        UpdateCollaboratorRequest,
         annotations={
             'title': 'Update project collaborator',
             'idempotentHint': True
@@ -49,7 +56,9 @@ def register_project_collaboration_tools(mcp):
         return await post('/projects/collaboration/update', model)
 
     # Delete
-    @mcp.tool(
+    @tool_with_args(
+        mcp,
+        DeleteCollaboratorRequest,
         annotations={
             'title': 'Delete project collaborator',
             'idempotentHint': True
