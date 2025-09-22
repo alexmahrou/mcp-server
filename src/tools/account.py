@@ -1,15 +1,37 @@
-from api_connection import post
-from models import AccountResponse
+from __future__ import annotations
+
+from typing import Dict, TypedDict
+
+from tool_contract import register_tool_contract, ToolResult
+from tool_helpers import execute_api_call
+
+
+class AccountData(TypedDict, total=False):
+    organizationId: str
+    accountType: str
+    balance: float
+    currency: str
+    raw: Dict[str, object]
+
 
 def register_account_tools(mcp):
-    # Read
     @mcp.tool(
         annotations={
-            'title': 'Read account',
-            'readOnlyHint': True,
-            'openWorldHint': True
+            "title": "Read account",
+            "readOnlyHint": True,
+            "openWorldHint": True,
         }
     )
-    async def read_account() -> AccountResponse:
-        """Read the organization account status."""
-        return await post('/account/read')
+    async def read_account() -> ToolResult:
+        def transform(payload: Dict[str, object]) -> AccountData:
+            return AccountData(
+                organizationId=str(payload.get("organizationId") or ""),
+                accountType=str(payload.get("accountType") or ""),
+                currency=str(payload.get("currency") or ""),
+                balance=float(payload.get("balance") or 0.0),
+                raw=payload,
+            )
+
+        return await execute_api_call("/account/read", {}, transform=transform)
+
+    register_tool_contract("read_account", read_account, mcp)

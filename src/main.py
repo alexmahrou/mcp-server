@@ -1,6 +1,7 @@
 import os
 from mcp.server.fastmcp import FastMCP
 
+from tool_contract import initialize_tool_contracts
 from tools.account import register_account_tools
 from tools.project import register_project_tools
 from tools.project_collaboration import register_project_collaboration_tools
@@ -24,6 +25,9 @@ with open('src/instructions.md', 'r', encoding='utf-8') as file:
     instructions = file.read()
 # Initialize the FastMCP server.
 mcp = FastMCP('quantconnect', instructions, host="0.0.0.0")
+
+# Ensure contract hooks are installed before any tool registration.
+initialize_tool_contracts()
 
 # Register all the tools.
 registration_functions = [

@@ -58,6 +58,23 @@ docker pull quantconnect/mcp-server
 ```
 If you have an ARM chip, add the `--platform linux/arm64` option.
 
+## Tool Contract
+All MCP tools exposed by this server follow a uniform contract so Codex, Claude Desktop, and the MCP Inspector can rely on the same schema.
+
+- **Inputs** are single JSON objects (no positional `args`) with `type: "object"`, explicit `required` entries, and `additionalProperties: false`. Identifier fields always accept string values; tools coerce them to integers internally when required. Optional behaviour is implemented through runtime defaults, not nullable unions.
+- **Allowed JSON types** inside schemas are limited to `string`, `number`, `boolean`, `object`, and `array`. We never emit `integer` types or `oneOf`/`anyOf` unions so downstream clients can validate without custom logic.
+- **Outputs** are structured envelopes shaped as:
+  ```json
+  {
+    "success": true,
+    "error": {"code": "", "message": "", "hint": ""},
+    "data": {"…": "…"}
+  }
+  ```
+  Errors use the same envelope with `success: false` and a populated `error` object. Values are sanitized to avoid `null` and are always JSON-serializable (datetimes are ISO strings, binaries are base64 strings).
+
+These guarantees make the tool suite interoperable with Codex, Claude Desktop, and the MCP Inspector, and enable automated schema audits in CI.
+
 ## Available Tools (64)
 | Tools provided by this Server | Short Description |
 | -------- | ------- |
